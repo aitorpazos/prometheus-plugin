@@ -305,7 +305,6 @@ public class JobCollector extends Collector {
          * ABORTED   4 false - The build was manually aborted.
          */
         buildMetrics.jobBuildResultOrdinal.labels(buildLabelValueArray).set(ordinal);
-        //buildMetrics.jobBuildResult.labels(buildLabelValueArray).set(ordinal < 2 ? 1 : 0);
 
         logger.debug("Processing run [{}] from job [{}]", run.getNumber(), job.getName());
 
