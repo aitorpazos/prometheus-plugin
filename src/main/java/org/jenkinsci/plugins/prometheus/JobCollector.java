@@ -31,14 +31,11 @@ public class JobCollector extends Collector {
     private static final String UNDEFINED = "UNDEFINED";
 
     private Summary summary;
-    private Counter jobSuccessCount;
-    private Counter jobFailedCount;
     private Gauge jobHealthScore;
 
     private static class BuildMetrics {
 
         public Gauge jobBuildResultOrdinal;
-        public Gauge jobBuildResult;
         public Gauge jobBuildStartMillis;
         public Gauge jobBuildDuration;
         public Summary stageSummary;
@@ -58,13 +55,6 @@ public class JobCollector extends Collector {
                     .subsystem(subsystem).namespace(namespace)
                     .labelNames(labelNameArray)
                     .help("Build status of a job.")
-                    .create();
-
-            this.jobBuildResult = Gauge.build()
-                    .name(fullname + this.buildPrefix +"_build_result")
-                    .subsystem(subsystem).namespace(namespace)
-                    .labelNames(labelNameArray)
-                    .help("Build status of a job as a boolean (0 or 1)")
                     .create();
 
             this.jobBuildDuration = Gauge.build()
@@ -167,20 +157,6 @@ public class JobCollector extends Collector {
                 .help("Summary of Jenkins build times in milliseconds by Job")
                 .create();
 
-        jobSuccessCount = Counter.build()
-                .name(fullname + "_success_build_count")
-                .subsystem(subsystem).namespace(namespace)
-                .labelNames(labelNameArray)
-                .help("Successful build count")
-                .create();
-
-        jobFailedCount = Counter.build()
-                .name(fullname + "_failed_build_count")
-                .subsystem(subsystem).namespace(namespace)
-                .labelNames(labelNameArray)
-                .help("Failed build count")
-                .create();
-
         // This metric uses "base" labels as it is just the health score reported
         // by the job object and the optional labels params and status don't make much
         // sense in this context.
@@ -215,8 +191,6 @@ public class JobCollector extends Collector {
         });
 
         addSamples(samples, summary.collect(), "Adding [{}] samples from summary");
-        addSamples(samples, jobSuccessCount.collect(), "Adding [{}] samples from counter");
-        addSamples(samples, jobFailedCount.collect(), "Adding [{}] samples from counter");
         addSamples(samples, jobHealthScore.collect(), "Adding [{}] samples from gauge");
 
         addSamples(samples, lastBuildMetrics);
@@ -234,7 +208,6 @@ public class JobCollector extends Collector {
 
     private void addSamples(List<MetricFamilySamples> allSamples, BuildMetrics buildMetrics) {
         addSamples(allSamples, buildMetrics.jobBuildResultOrdinal.collect(), "Adding [{}] samples from gauge");
-        addSamples(allSamples, buildMetrics.jobBuildResult.collect(), "Adding [{}] samples from gauge");
         addSamples(allSamples, buildMetrics.jobBuildDuration.collect(), "Adding [{}] samples from gauge");
         addSamples(allSamples, buildMetrics.jobBuildStartMillis.collect(), "Adding [{}] samples from gauge");
         addSamples(allSamples, buildMetrics.jobBuildTestsTotal.collect(), "Adding [{}] samples from gauge");
@@ -305,13 +278,6 @@ public class JobCollector extends Collector {
                     summary.labels(labelValueArray).observe(duration);
                 }
 
-                if (runResult != null && !run.isBuilding()) {
-                    if (runResult.ordinal == 0 || runResult.ordinal == 1) {
-                        jobSuccessCount.labels(labelValueArray).inc();
-                    } else {
-                        jobFailedCount.labels(labelValueArray).inc();
-                    }
-                }
             }
             run = run.getPreviousBuild();
         }
@@ -339,7 +305,7 @@ public class JobCollector extends Collector {
          * ABORTED   4 false - The build was manually aborted.
          */
         buildMetrics.jobBuildResultOrdinal.labels(buildLabelValueArray).set(ordinal);
-        buildMetrics.jobBuildResult.labels(buildLabelValueArray).set(ordinal < 2 ? 1 : 0);
+        //buildMetrics.jobBuildResult.labels(buildLabelValueArray).set(ordinal < 2 ? 1 : 0);
 
         logger.debug("Processing run [{}] from job [{}]", run.getNumber(), job.getName());
 
