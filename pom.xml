@@ -9,11 +9,11 @@
   </parent>
 
   <artifactId>prometheus</artifactId>
-  <version>2.0.11</version>
+  <version>20.0.11</version>
   <packaging>hpi</packaging>
-  <name>Prometheus metrics plugin</name>
-  <description>Expose Jenkins metrics in prometheus format</description>
-  <url>https://github.com/jenkinsci/prometheus-plugin</url>
+  <name>Prometheus metrics plugin. (customised)</name>
+  <description>(Aitor modified) Expose Jenkins metrics in prometheus format</description>
+  <url>https://github.com/aitorpazos/prometheus-plugin</url>
   <inceptionYear>2016</inceptionYear>
 
   <properties>
