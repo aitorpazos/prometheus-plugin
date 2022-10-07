@@ -9,7 +9,7 @@
   </parent>
 
   <artifactId>prometheus</artifactId>
-  <version>2.0.12-SNAPSHOT</version>
+  <version>2.0.14-SNAPSHOT</version>
   <packaging>hpi</packaging>
   <name>Prometheus metrics plugin</name>
   <description>Expose Jenkins metrics in prometheus format</description>
@@ -21,8 +21,8 @@
     <jenkins.version>2.319.3</jenkins.version>
     <java.level>8</java.level>
 
-    <prometheus.simpleclient.version>0.15.0</prometheus.simpleclient.version>
-    <slf4j.version>1.7.36</slf4j.version>
+    <prometheus.simpleclient.version>0.16.0</prometheus.simpleclient.version>
+    <slf4j.version>2.0.3</slf4j.version>
 
     <cloudbees-disk-usage-simple.version>0.10</cloudbees-disk-usage-simple.version>
     <metrics.version>4.1.6.1</metrics.version>
@@ -59,7 +59,7 @@
     <connection>scm:git:git://github.com/jenkinsci/prometheus-plugin.git</connection>
     <developerConnection>scm:git:git@github.com:jenkinsci/prometheus-plugin.git</developerConnection>
     <url>https://github.com/jenkinsci/prometheus-plugin/</url>
-    <tag>prometheus-2.0.8</tag>
+    <tag>prometheus-2.0.12</tag>
   </scm>
 
   <repositories>
@@ -80,7 +80,7 @@
       <dependency>
         <groupId>io.jenkins.tools.bom</groupId>
         <artifactId>bom-2.319.x</artifactId>
-        <version>1210.vcd41f6657f03</version>
+        <version>1607.va_c1576527071</version>
         <scope>import</scope>
         <type>pom</type>
       </dependency>

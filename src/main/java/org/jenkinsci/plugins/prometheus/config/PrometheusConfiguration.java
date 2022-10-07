@@ -53,11 +53,13 @@ public class PrometheusConfiguration extends GlobalConfiguration {
 
     private boolean appendParamLabel = false;
     private boolean appendStatusLabel = false;
+    private boolean perBuildMetrics = false;
 
 
     private String labeledBuildParameterNames = "";
 
     private boolean collectDiskUsage = true;
+    private boolean collectNodeStatus = true;
 
 
     public PrometheusConfiguration() {
@@ -89,8 +91,10 @@ public class PrometheusConfiguration extends GlobalConfiguration {
         processingDisabledBuilds = json.getBoolean("processingDisabledBuilds");
         appendParamLabel = json.getBoolean("appendParamLabel");
         appendStatusLabel = json.getBoolean("appendStatusLabel");
+        perBuildMetrics = json.getBoolean("perBuildMetrics");
+        collectNodeStatus = json.getBoolean("collectNodeStatus");
 
-      labeledBuildParameterNames = json.getString("labeledBuildParameterNames");
+        labeledBuildParameterNames = json.getString("labeledBuildParameterNames");
 
         save();
         return super.configure(req, json);
@@ -133,8 +137,7 @@ public class PrometheusConfiguration extends GlobalConfiguration {
         if (collectDiskUsage == null) {
             String value = System.getenv(COLLECT_DISK_USAGE);
             this.collectDiskUsage = value != null ? Boolean.parseBoolean(value) : DEFAULT_COLLECT_DISK_USAGE;
-        }
-        else {
+        } else {
             this.collectDiskUsage = collectDiskUsage;
         }
         save();
@@ -247,6 +250,19 @@ public class PrometheusConfiguration extends GlobalConfiguration {
         save();
     }
 
+    public boolean isPerBuildMetrics() {
+        return perBuildMetrics;
+    }
+
+    public boolean isCollectNodeStatus() {
+        return collectNodeStatus;
+    }
+
+    public void setPerBuildMetrics(boolean perBuildMetrics) {
+        this.perBuildMetrics = perBuildMetrics;
+        save();
+    }
+
     public String getUrlName() {
         return urlName;
     }
@@ -307,10 +323,9 @@ public class PrometheusConfiguration extends GlobalConfiguration {
     }
 
     private String[] parseParameterNamesFromStringSeparatedByComma(String stringValue) {
-        if (stringValue==null || stringValue.trim().length() < 1) {
-            return new String[] {};
+        if (stringValue == null || stringValue.trim().length() < 1) {
+            return new String[]{};
         }
         return stringValue.split("\\s*,\\s*");
     }
-
 }

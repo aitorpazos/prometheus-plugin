@@ -149,6 +149,8 @@ public class PrometheusConfigurationTest {
         config.accumulate("appendStatusLabel", "false");
         config.accumulate("labeledBuildParameterNames", "");
         config.accumulate("collectDiskUsage", "true");
+        config.accumulate("collectNodeStatus", "true");
+        config.accumulate("perBuildMetrics", "false");
         return config;
     }
 
